@@ -285,8 +285,12 @@ public class GameActivity extends Activity {
         fps.setTextSize(12);
         fps.setPadding(12, 6, 12, 6);
         fps.setFocusable(false);
-        root.addView(fps, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP | Gravity.START));
+        FrameLayout.LayoutParams fpsLayout = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.TOP | Gravity.END);
+        fpsLayout.rightMargin = Math.round(60 * getResources().getDisplayMetrics().density);
+        fpsLayout.topMargin = Math.round(8 * getResources().getDisplayMetrics().density);
+        root.addView(fps, fpsLayout);
         File stats = new File(runtime.logFile().getParentFile(), "render-fps.txt");
         fps.post(new Runnable() {
             @Override public void run() {
