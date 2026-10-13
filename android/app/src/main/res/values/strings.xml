@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenUT99GOTY</string>
+    <string name="app_subtitle">Lanceur non officiel - moteur OldUnreal</string>
+    <string name="shortcut_change_folder">Changer le dossier du jeu</string>
+
+    <string name="btn_play">Jouer</string>
+    <string name="btn_download">Télécharger le jeu (≈ 650 Mo)</string>
+    <string name="btn_pick">J\'ai déjà le jeu : choisir son dossier</string>
+    <string name="btn_grant">Autoriser l\'accès aux fichiers</string>
+    <string name="btn_language">Langue du jeu : %1$s</string>
+    <string name="settings">Réglages</string>
+    <string name="btn_resolution_720">Résolution : 720p (fluide)</string>
+    <string name="btn_resolution_1080">Résolution : 1080p (net)</string>
+
+    <string name="status_need_permission">OpenUT99GOTY a besoin de l\'accès aux fichiers pour lire (et installer) les données du jeu.</string>
+    <string name="status_no_game">Unreal Tournament 99 GOTY n\'est pas encore installé.\n\nTéléchargez-le (diffusion gratuite autorisée par Epic Games, via OldUnreal) ou indiquez le dossier d\'une installation existante (PC, DVD, GOG…).</string>
+    <string name="status_saved_missing">Le jeu n\'est plus présent dans :\n%1$s\n\nTéléchargez-le à nouveau ou choisissez son dossier.</string>
+    <string name="status_pick_invalid">Ce dossier ne contient pas Unreal Tournament 99 GOTY :\n%1$s\n\nÉléments manquants : %2$s</string>
+    <string name="status_pick_unsupported">Ce dossier n\'est pas accessible directement. Choisissez un dossier du stockage interne ou de la carte SD.</string>
+    <string name="status_found">Jeu trouvé :\n%1$s</string>
+    <string name="status_installed">Installation terminée :\n%1$s</string>
+
+    <string name="download_confirm_title">Télécharger Unreal Tournament 99 GOTY</string>
+    <string name="download_confirm_text">Epic Games autorise la diffusion gratuite d\'Unreal Tournament 99 GOTY. OpenUT99GOTY télécharge l\'image du DVD depuis les serveurs d\'OldUnreal (ou Internet Archive), comme l\'installeur officiel d\'OldUnreal, puis l\'installe sur l\'appareil.\n\n• Téléchargement : environ 3 Go (Wi-Fi conseillé)\n• Espace nécessaire : 3 Go pendant l\'installation, environ 6 Go ensuite\n• Durée : de 20 minutes à 1 heure selon la connexion\n\nChoisissez ensuite le dossier où installer le jeu (mémoire interne ou carte SD). Un dossier « UT99 » y sera créé.</string>
+    <string name="download_confirm_ok">Choisir le dossier</string>
+    <string name="download_no_space">Espace libre insuffisant : %1$d Go disponibles, %2$d Go nécessaires.</string>
+    <string name="download_channel">Téléchargement du jeu</string>
+    <string name="download_title">Unreal Tournament 99 GOTY</string>
+    <string name="download_preparing">Préparation…</string>
+    <string name="download_iso">Téléchargement de l\'image du DVD… %1$d %%</string>
+    <string name="download_iso_progress">Téléchargement de l\'image du DVD : %1$d / %2$d Mo</string>
+    <string name="download_verify">Vérification du téléchargement…</string>
+    <string name="download_install">Installation : %1$s</string>
+    <string name="download_done">Unreal Tournament 99 GOTY est installé.</string>
+    <string name="download_failed">L\'installation a échoué : %1$s\n\nRelancez le téléchargement : il reprendra là où il s\'était arrêté.</string>
+
+    <string name="install_runtime">Installation du runtime Linux… %1$d %%\n(première fois uniquement)</string>
+    <string name="install_patch">Téléchargement du moteur (patch OldUnreal)… %1$d %%\n(première fois uniquement)</string>
+    <string name="install_patch_extract">Installation du moteur…</string>
+    <string name="game_preparing">Préparation des fichiers du jeu…</string>
+    <string name="game_starting">Démarrage du jeu…</string>
+    <string name="game_error">Erreur lors de la préparation : %1$s</string>
+    <string name="game_exited">Le jeu s\'est arrêté (code %1$d).\n\n%2$s</string>
+    <string name="input_mode_menu">Souris : ON</string>
+    <string name="input_mode_game">Souris : OFF</string>
+    <string name="btn_return_game">Retour au jeu</string>
+    <string name="input_text_title">Saisie dans le champ sélectionné du jeu</string>
+    <string name="input_text_send">Envoyer</string>
+    <string name="graphics_title">Graphismes</string>
+    <string name="graphics_driver">Pilote graphique</string>
+    <string name="graphics_resolution">Résolution de rendu</string>
+    <string name="graphics_fps">Afficher les FPS du moteur</string>
+    <string name="graphics_apply">Appliquer</string>
+    <string name="graphics_summary">Graphismes : %1$dp · %2$s</string>
+    <string name="graphics_help">Pour améliorer la fluidité, essayez Turnip et 540p. Le rendu logiciel sert au dépannage et sera plus lent. Le pilote et la résolution prennent effet au prochain lancement ; les FPS changent dès le retour au jeu.</string>
+    <string-array name="graphics_drivers">
+        <item>Automatique</item>
+        <item>Vulkan · Turnip intégré</item>
+        <item>Logiciel · dépannage</item>
+    </string-array>
+    <string-array name="graphics_resolutions">
+        <item>540p · performance</item>
+        <item>720p · équilibre</item>
+        <item>1080p · netteté</item>
+    </string-array>
+    <string name="btn_restart_game">Redémarrer le jeu</string>
+    <string name="btn_controller">Configurer la manette</string>
+</resources>
