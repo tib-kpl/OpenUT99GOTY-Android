@@ -49,3 +49,17 @@ Pushes to `main` run the release workflow with native ARM64 GitHub runners. Conf
 This launcher is not affiliated with Epic Games or OldUnreal. Upstream game and patch licenses apply separately from the launcher license.
 
 The colored app icon and launcher illustration are original generated fan art inspired by the respective game. **Configurer la manette** stores per-device button mappings and right-stick axis choices. Generic Android button layouts and RX/RY right-stick axes are supported; AYN Thor still requires physical verification.
+
+### External controllers
+
+Xbox, PlayStation (DualShock / DualSense), Switch-style and generic Android gamepads
+use Android's standard button positions over USB or Bluetooth. The configuration screen
+shows the corresponding physical button labels for Microsoft, Sony and Nintendo devices;
+other controllers keep the generic A/B/X/Y labels. Custom bindings remain saved per device.
+Both digital and analog triggers are accepted and merged, with no duplicate action.
+Right-stick Z/RZ and RX/RY layouts and device dead zones are handled; held actions are
+released when a controller disconnects or is reconfigured. Linux cannot open a second
+copy of the physical controller alongside the Android input bridge.
+
+Odin 2 Portal mappings are preserved. AYN Thor menu and in-game controls were validated in Daikatana.
+The other ports use the same Android controller normalization. Xbox, DualSense and Switch controllers still need physical testing.
