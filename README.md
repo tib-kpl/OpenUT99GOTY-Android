@@ -55,15 +55,14 @@ To change the game folder later, **long-press the app icon** and choose
 ### Gamepad controls
 
 The controller is translated to keyboard and mouse input. **Mouse ON** moves the menu
-pointer with the right stick; **Mouse OFF** aims in game. Press **Select** or the compact,
-translucent button at the top center to switch modes. The label follows the selected game
+pointer with the right stick; **Mouse OFF** aims in game. Use the compact, translucent button at the top center to switch modes. The label follows the selected game
 language. SDL mouse capture reports mode changes, but the manual switch remains available
 for menus that keep capture enabled.
 
-In menus, R2 clicks, A sends Enter, B goes back and X sends Tab. The D-pad moves between
+In menus, R2 clicks, A sends Enter, B goes back and X sends Tab. Start also sends Escape. The D-pad moves between
 controls (down: next, up: previous); left/right changes the selected value. The left stick
 sends arrow keys. Touch input positions and clicks the pointer in Mouse ON mode.
-**Y** opens the Android keyboard for the selected text field. Text submission in some fields, including the
+**Select** opens the Android keyboard for the selected text field. Text submission in some fields, including the
 player name, is still under investigation; a physical keyboard can be used for that field.
 
 In Game mode:
@@ -75,11 +74,12 @@ In Game mode:
 | R2 | Fire / left mouse click |
 | L2 | Secondary fire / right mouse click |
 | A | Jump |
-| B / Start | Escape / menu |
+| B | Back in menus; no gameplay action |
+| Start | Escape / menu |
 | L1 / R1 | Previous / next weapon |
 | L3 | Crouch |
 | R3 | Best weapon |
-| Select | Switch Mouse ON / OFF |
+| Select | Open Android keyboard |
 | X | E key (available for a custom in-game binding) |
 | Y | Translocator |
 | D-pad | Arrow keys |
@@ -97,6 +97,9 @@ The settings gear pauses the current session:
 - **Afficher les FPS du moteur** toggles the upper-right counter. Visibility changes when
   returning to the running game; renderer and resolution changes apply at the next launch.
 - **Configurer la manette** saves button mappings and right-stick axis choices per device.
+- **Pseudo du joueur** edits your nickname in an Android form (up to 20 Latin characters).
+  The saved name is applied to `[DefaultPlayer] Name` in `User.ini` on the next engine launch;
+  use **Redémarrer le jeu** if a session is already running. This bypasses the native text-field issue.
 
 ### External controllers
 
@@ -127,6 +130,20 @@ The bridge preserves unwritten PCM after partial writes and recreates the output
 invalidates it, while the engine keeps running. Pause/stop flush queued sound. Recovery and
 pause/resume were tested by simulation; a real Bluetooth connect/disconnect transition was
 validated in Daikatana on the Thor. Headset transitions in this game remain to be checked.
+
+### Local multiplayer (LAN)
+
+Connect both devices to the same Wi-Fi network. On the host, create a multiplayer game
+and start the listen server. On the other device, open the LAN server list and select
+the discovered game; no IP address needs to be entered. In UT2004, enable **Serveur LAN**
+in the server rules and use **Ecoute** to host while playing.
+
+The launcher enables Wi-Fi multicast reception while the engine runs and prepares Linux
+hostname/DNS resolution from the Android network. Discovery and joining were tested between
+an Odin 2 Portal and an AYN Thor: UT99 (DM-Agony), Unreal Gold (DmTerra), and UT2004
+(DM-1on1-Albatross). A guest Wi-Fi network that isolates clients prevents LAN connections.
+Internet server discovery and hosting depend on the game's master servers and router setup;
+these two-console tests validate LAN play.
 
 ## How it works
 

@@ -412,7 +412,7 @@ final class GameInstaller {
      * ~/.ut99/System/UT99.ini : cree depuis Default.ini du moteur arm64 au premier
      * lancement, puis rendu OpenGL et resolution plein ecran au format de l'ecran.
      */
-    static void prepareConfig(LaunchConfig config, int width, int height, String language) throws IOException {
+    static void prepareConfig(LaunchConfig config, int width, int height, String language, String playerName) throws IOException {
         File ini = new File(config.homeDir, "UnrealTournament.ini");
         List<String> lines;
         if (ini.isFile()) {
@@ -440,6 +440,10 @@ final class GameInstaller {
         List<String> userLines = userIni.isFile()
                 ? new ArrayList<>(Files.readAllLines(userIni.toPath(), StandardCharsets.ISO_8859_1))
                 : new ArrayList<>(Files.readAllLines(new File(config.patchDir, "System/DefUser.ini").toPath(), StandardCharsets.ISO_8859_1));
+        if (playerName != null) {
+            Ini.set(userLines, "DefaultPlayer", "Name", playerName);
+            Ini.set(lines, "URL", "Name", playerName);
+        }
         for (String[] binding : new String[][]{{"F5", "PrevWeapon"}, {"F6", "NextWeapon"}, {"W", "MoveForward"}, {"S", "MoveBackward"}, {"A", "StrafeLeft"}, {"D", "StrafeRight"}, {"Space", "Jump"}, {"C", "Duck"}, {"G", "SwitchToBestWeapon"}, {"MouseWheelUp", "PrevWeapon"}, {"MouseWheelDown", "NextWeapon"}})
             Ini.set(userLines, "Engine.Input", binding[0], binding[1]);
         mkdirs(config.homeDir);

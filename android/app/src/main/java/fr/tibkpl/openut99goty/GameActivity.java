@@ -42,6 +42,7 @@ public class GameActivity extends Activity {
     private Button inputMode;
     private TextView fpsCounter;
     private AudioBridge audio;
+    private LanNetwork lanNetwork;
     private volatile boolean finishing;
     private boolean resumed;
     private java.util.List<String> availableLanguages;
@@ -98,6 +99,7 @@ public class GameActivity extends Activity {
         try {
             audio = new AudioBridge(runtime.audioFifo());
             audio.start();
+            lanNetwork = new LanNetwork(this);
             InputBridge.debug = false;
             input = new InputBridge(menu -> runOnUiThread(() -> {
                 if (input == null || finishing) return;
@@ -125,7 +127,7 @@ public class GameActivity extends Activity {
             availableLanguages = GameData.detectLanguages(config.gameRoot, config.patchDir);
             String language = GameData.getLanguage(this, availableLanguages);
             updateInputModeButton();
-            GameInstaller.prepareConfig(config, width, height, language);
+            GameInstaller.prepareConfig(config, width, height, language, GameData.configuredPlayerName(this));
             boolean retry = getIntent().getBooleanExtra(EXTRA_SOFTWARE_RETRY, false);
             String renderer = GameData.getRenderer(this);
             boolean gpu = !retry && runtime.gpuAvailable() && !"software".equals(renderer)
@@ -313,10 +315,21 @@ public class GameActivity extends Activity {
     private void openGameKeyboard() {
         EditText text = new EditText(this);
         text.setSingleLine(true);
+        text.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_SEND
+                | android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.input_text_title).setView(text)
                 .setPositiveButton(R.string.input_text_send, (d, which) -> input.sendText(text.getText().toString()))
                 .setNegativeButton(android.R.string.cancel, null).create();
+        text.setOnEditorActionListener((view, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEND
+                    || actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                input.sendText(text.getText().toString());
+                dialog.dismiss();
+                return true;
+            }
+            return false;
+        });
         dialog.setOnShowListener(d -> {
             text.requestFocus();
             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -327,14 +340,14 @@ public class GameActivity extends Activity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int keyCode = ControllerInput.key(event);
-        if (input != null && input.isMenuMode() && keyCode == KeyEvent.KEYCODE_BUTTON_Y) {
+        // In gameplay B is unbound; consume it to prevent Android Back navigation.
+        if (keyCode == KeyEvent.KEYCODE_BUTTON_B && (input == null || !input.isEngineMenuActive())) return true;
+        if (input != null && keyCode == KeyEvent.KEYCODE_BUTTON_SELECT) {
             if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) openGameKeyboard();
             return true;
         }
-        if (input != null && keyCode == KeyEvent.KEYCODE_BUTTON_SELECT) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) toggleInputMode();
-            return true;
-        }
+        // Y keeps its gameplay action; it does not open a text dialog in menus.
+        if (input != null && input.isMenuMode() && keyCode == KeyEvent.KEYCODE_BUTTON_Y) return true;
         boolean system = keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                 || keyCode == KeyEvent.KEYCODE_VOLUME_MUTE || keyCode == KeyEvent.KEYCODE_HOME;
         if (!system && input != null && input.onKey(event)) return true;
@@ -371,6 +384,7 @@ public class GameActivity extends Activity {
         finishing = true;
         if (runtime != null) runtime.stop();
         if (audio != null) audio.stop();
+        if (lanNetwork != null) lanNetwork.close();
         if (controllerMonitor != null) controllerMonitor.close();
         if (input != null) input.close();
         super.onDestroy();

@@ -53,7 +53,7 @@ final class InputBridge {
 
     static {
         PAD.put(KeyEvent.KEYCODE_BUTTON_A, ' ');          // saut
-        PAD.put(KeyEvent.KEYCODE_BUTTON_B, XK_ESCAPE);    // retour (menus) / menu (jeu)
+        // B only goes back in menus; Start opens the menu during gameplay.
         PAD.put(KeyEvent.KEYCODE_BUTTON_X, 'e');          // utiliser
         PAD.put(KeyEvent.KEYCODE_BUTTON_Y, 'q');          // translocateur
         PAD.put(KeyEvent.KEYCODE_BUTTON_START, XK_ESCAPE); // menu
@@ -119,6 +119,7 @@ final class InputBridge {
     // Etat de la manette
     private volatile float aimX, aimY;
     private volatile boolean menuMode = true;
+    private volatile boolean engineMenuActive = true;
     private int pointerWidth = 1280, pointerHeight = 720;
     private volatile int pointerX = 640, pointerY = 360;
     private final Handler touchHandler = new Handler(Looper.getMainLooper());
@@ -149,6 +150,7 @@ final class InputBridge {
     }
 
     boolean isMenuMode() { return menuMode; }
+    boolean isEngineMenuActive() { return engineMenuActive; }
 
     synchronized void setPointerBounds(int width, int height) {
         pointerWidth = width;
@@ -260,6 +262,7 @@ final class InputBridge {
             if (menuMode && keyCode == KeyEvent.KEYCODE_DPAD_UP) mapped = XK_UP;
             if (menuMode && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) mapped = XK_DOWN;
             if (menuMode && keyCode == KeyEvent.KEYCODE_BUTTON_A) mapped = XK_RETURN;
+            if (engineMenuActive && keyCode == KeyEvent.KEYCODE_BUTTON_B) mapped = XK_ESCAPE;
             if (menuMode && keyCode == KeyEvent.KEYCODE_BUTTON_X) mapped = XK_TAB;
             if (!down && heldPadKeys.indexOfKey(keyCode) >= 0) {
                 mapped = heldPadKeys.get(keyCode);
@@ -425,7 +428,10 @@ final class InputBridge {
                     if (count < 0) return;
                     offset += count;
                 }
-                if (message[0] == 7 && modeListener != null) modeListener.onModeChanged(message[4] != 0);
+                if (message[0] == 7) {
+                    engineMenuActive = message[4] != 0;
+                    if (modeListener != null) modeListener.onModeChanged(engineMenuActive);
+                }
             }
         } catch (IOException ignored) { }
     }

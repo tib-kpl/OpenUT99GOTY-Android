@@ -67,6 +67,24 @@ final class GameData {
     }
 
     static String getRenderer(Context context) { return prefs(context).getString(KEY_RENDERER, "auto"); }
+    static String getPlayerName(Context context) {
+        String saved = prefs(context).getString("player_name", null);
+        if (saved != null) return saved;
+        File userIni = new File(context.getFilesDir(), "home/User.ini");
+        try {
+            boolean player = false;
+            for (String line : java.nio.file.Files.readAllLines(userIni.toPath(), java.nio.charset.StandardCharsets.ISO_8859_1)) {
+                String value = line.trim();
+                if (value.startsWith("[")) player = value.equalsIgnoreCase("[DefaultPlayer]");
+                else if (player && value.regionMatches(true, 0, "Name=", 0, 5)) return value.substring(5);
+            }
+        } catch (java.io.IOException ignored) { }
+        return "Player";
+    }
+
+    static String configuredPlayerName(Context context) { return prefs(context).getString("player_name", null); }
+    static void savePlayerName(Context context, String value) { prefs(context).edit().putString("player_name", value).apply(); }
+
     static boolean showFps(Context context) { return prefs(context).getBoolean(KEY_SHOW_FPS, false); }
     static void saveGraphics(Context context, int height, String renderer, boolean fps) {
         prefs(context).edit().putInt(KEY_RENDER_HEIGHT, height).putString(KEY_RENDERER, renderer)

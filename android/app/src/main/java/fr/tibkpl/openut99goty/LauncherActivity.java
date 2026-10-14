@@ -78,6 +78,7 @@ public class LauncherActivity extends Activity {
         pickButton.setOnClickListener(v -> openPicker(REQ_PICK_GAME));
         resolutionButton.setOnClickListener(v -> openGraphicsSettings());
         findViewById(R.id.controller).setOnClickListener(v -> ControllerSettings.show(this));
+        findViewById(R.id.player_name).setOnClickListener(v -> openPlayerName());
         updateResolutionButton();
         forcePick = ACTION_CHANGE_FOLDER.equals(getIntent().getAction())
                 || ACTION_SETTINGS.equals(getIntent().getAction());
@@ -178,6 +179,44 @@ public class LauncherActivity extends Activity {
         intent.putExtra(GameActivity.EXTRA_GAME_DIR, gameDir.getAbsolutePath());
         startActivity(intent);
         finish();
+    }
+
+    private void openPlayerName() {
+        android.widget.EditText name = new android.widget.EditText(this);
+        name.setSingleLine(true);
+        name.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_DONE | android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        name.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        name.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(20)});
+        name.setText(GameData.getPlayerName(this));
+        name.selectAll();
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        int padding = Math.round(20 * getResources().getDisplayMetrics().density);
+        content.setPadding(padding, padding, padding, 0);
+        TextView help = new TextView(this);
+        help.setText(R.string.player_name_help);
+        content.addView(help);
+        content.addView(name, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.player_name_title)
+                .setView(content).setPositiveButton(R.string.player_name_save, null)
+                .setNegativeButton(android.R.string.cancel, null).create();
+        dialog.setOnShowListener(d -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                String value = name.getText().toString().trim();
+                if (value.isEmpty() || value.length() > 20
+                        || !java.nio.charset.StandardCharsets.ISO_8859_1.newEncoder().canEncode(value)
+                        || value.chars().anyMatch(c -> Character.isISOControl(c))) {
+                    name.setError(getString(R.string.player_name_invalid));
+                    return;
+                }
+                GameData.savePlayerName(this, value);
+                dialog.dismiss();
+                android.widget.Toast.makeText(this, R.string.player_name_saved, android.widget.Toast.LENGTH_LONG).show();
+            });
+            name.requestFocus();
+            dialog.getWindow().setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        });
+        dialog.show();
     }
 
     /** Explique la provenance et la taille du telechargement avant de choisir la destination. */
